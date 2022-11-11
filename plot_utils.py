@@ -56,3 +56,12 @@ def print_eigen(v, max_row, max_col):
             sys.stdout.write(str(val) + ' ')
             count+=1
         print()
+
+def to_env_list(file_path):
+    """
+    Reads in a txt file line by line into a list.
+    """
+    with open(file_path) as f:
+        lines=f.readlines()
+        env_list=[line.strip() for line in lines]
+        return env_list

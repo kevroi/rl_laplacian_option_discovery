@@ -1,5 +1,6 @@
 import numpy as np
 import pickle
+from plot_utils import to_env_list
 
 
 # Possible default actions in tabular environment
@@ -170,18 +171,7 @@ class BaseEnvironment(object):
 
 class GridEnvironment(BaseEnvironment):
     def __init__(self):
-        grid_env = [
-            '         G',
-            '          ',
-            '          ',
-            '          ',
-            '          ',
-            '          ',
-            '          ',
-            '          ',
-            '          ',
-            'S         ',
-        ]
+        grid_env = to_env_list('environments/gridenv.txt')
         max_row, max_col, start_state, goal_state, obstacles = parse_env(grid_env)
 
         BaseEnvironment.__init__(self, max_row, max_col, start_state,
