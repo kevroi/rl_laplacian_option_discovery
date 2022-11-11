@@ -375,7 +375,8 @@ class OptionExploreQAgent(object):
             # Taking last max to break ties inorder to prefer Terminate action
             ca = np.flatnonzero(q == q.max())[-1]
             pi[idx] = ca # each state will have related optimal action idx
-	return pi
+	    
+        return pi
 
     def add_eigenoption(self, eigenoption):
         self.option_set.append(eigenoption)

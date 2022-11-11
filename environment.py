@@ -90,9 +90,9 @@ class BaseEnvironment(object):
 
     def step(self, action):
         if not action < self.max_actions:
-            print "Invalid action taken!!"
-            print "action: ", action
-            print "current_state", self.current_state
+            print ("Invalid action taken!!")
+            print ("action: ", action)
+            print ("current_state", self.current_state)
 
         action = self.action_set[action]
 

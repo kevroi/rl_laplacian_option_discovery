@@ -42,7 +42,7 @@ def pprint_pi(pi, max_row, max_col):
         for c in range((max_col)):
             sys.stdout.write(action_set[pi[count]] + ' ')
             count+=1
-        print '\n'
+        print('\n')
 
 def print_eigen(v, max_row, max_col):
     print
@@ -55,4 +55,4 @@ def print_eigen(v, max_row, max_col):
                 val = ' {:3.2f}'.format(v[count])
             sys.stdout.write(str(val) + ' ')
             count+=1
-        print
+        print()
