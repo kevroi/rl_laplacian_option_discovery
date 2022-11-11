@@ -115,7 +115,7 @@ class QAgent(object):
         self.discount = discount
 
     def set_dimension(self, dimension):
-        max_row, max_cols = int(dims[0]), int(dims[1])
+        max_rows, max_cols = int(dimension[0]), int(dimension[1])
         self.__init__(self, max_rows, max_cols)
 
     def get_steps(self):
@@ -348,7 +348,7 @@ class OptionExploreQAgent(object):
         self.discount = discount
 
     def set_dimension(self, dimension):
-        max_row, max_cols = int(dims[0]), int(dims[1])
+        max_rows, max_cols = int(dimension[0]), int(dimension[1])
         self.__init__(self, max_rows, max_cols)
 
     def get_steps(self):
