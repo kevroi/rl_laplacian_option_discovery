@@ -8,7 +8,7 @@ def pprint_value(V, max_row, max_col):
         for c in range(max_col):
             val = '{:3.2f}'.format(V[r][c])
             sys.stdout.write(str(val) + ' ')
-        print '\n'
+        print('\n')
 
 def load_option_policies(num_options=4):
     policies = []
@@ -103,7 +103,7 @@ for num_options in options_range:
         sys.stdout.flush()
     out = 'Num Options: {} | Diffusion Time: {}'.format(num_options,
                                                         np.mean(means))
-    print out
+    print(out)
     diffusion_time[num_options] = np.mean(means)
     # Saving in every iteration
     savename = 'data_files/diffusion_time_values_0_200.txt'
