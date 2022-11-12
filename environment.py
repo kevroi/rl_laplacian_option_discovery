@@ -173,6 +173,9 @@ class GridEnvironment(BaseEnvironment):
     def __init__(self):
         grid_env = to_env_list('environments/gridenv.txt')
         max_row, max_col, start_state, goal_state, obstacles = parse_env(grid_env)
+        self.max_row = max_row
+        self.max_col = max_col
+        self.name = "grid"
 
         BaseEnvironment.__init__(self, max_row, max_col, start_state,
                  goal_state, obstacles)
@@ -195,6 +198,9 @@ class RoomEnvironment(BaseEnvironment):
         ]
 
         max_row, max_col, start_state, goal_state, obstacles = parse_env(room_env)
+        self.max_row = max_row
+        self.max_col = max_col
+        self.name = "rooms"
 
         BaseEnvironment.__init__(self, max_row, max_col, start_state,
                  goal_state, obstacles)
@@ -210,6 +216,9 @@ class I_MazeEnvironment(BaseEnvironment):
         ]
 
         max_row, max_col, start_state, goal_state, obstacles = parse_env(I_maze_env)
+        self.max_row = max_row
+        self.max_col = max_col
+        self.name = "IMaze"
 
         BaseEnvironment.__init__(self, max_row, max_col, start_state,
                  goal_state, obstacles)
