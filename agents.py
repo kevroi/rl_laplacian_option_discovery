@@ -2,7 +2,7 @@ import numpy as np
 import pickle
 
 # Possible default actions in tabular environment
-default_action_set = [(0, 1), (0, -1), (1, 0), (-1, 0)] # R, L, D, U
+default_action_set = [(1,0), (-1,0), (0,-1), (0,1)] # R, L, D, U
 
 TERMINATE_ACTION = (0,0)
 
