@@ -17,3 +17,19 @@ class TestToEnvList(unittest.TestCase):
                         '__________',
                         'S_________',
                         ])
+
+    def test_roomenv(self):
+        self.assertEqual(to_env_list('environments/room.txt'),
+                        [
+                        '_____X____G',
+                        '_____X_____',
+                        '___________',
+                        '_____X_____',
+                        '_____X_____',
+                        'X_XXXX_____',
+                        '_____XXX_XX',
+                        '_____X_____',
+                        '_____X_____',
+                        '___________',
+                        'S____X_____'
+                        ])

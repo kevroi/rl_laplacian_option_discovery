@@ -183,20 +183,7 @@ class GridEnvironment(BaseEnvironment):
 
 class RoomEnvironment(BaseEnvironment):
     def __init__(self):
-        room_env = [
-            '     X    G',
-            '     X     ',
-            '           ',
-            '     X     ',
-            '     X     ',
-            'X XXXX     ',
-            '     XXX XX',
-            '     X     ',
-            '     X     ',
-            '           ',
-            'S    X     '
-        ]
-
+        room_env = to_env_list('environments/room.txt')
         max_row, max_col, start_state, goal_state, obstacles = parse_env(room_env)
         self.max_row = max_row
         self.max_col = max_col

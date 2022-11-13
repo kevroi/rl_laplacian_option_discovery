@@ -4,6 +4,7 @@ import rlglue
 import environment
 import agents
 import plot_utils
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 
 
@@ -148,17 +149,21 @@ class Options(object):
                     count += 1
             eigvec_imgs.append(eigvec_img)
 
-            # TODO plot final 100
-            if (index+1)//100 > quotient:
+            # plot if time is right
+            if (index+1)//100 > quotient or index == len(self.eigenvectors)-1:
                 plt.figure(0, figsize=(12,12))
 
                 for i in range(10):
                     for j in range(10):
                         ax = plt.subplot2grid((10,10), (i,j))
-                        ax.imshow(eigvec_imgs[(max_row-1)*i + j], cmap='jet', interpolation='nearest')
+                        try:
+                            ax.imshow(eigvec_imgs[(max_row-1)*i + j], cmap='jet', interpolation='nearest')
+                        except IndexError:
+                            # this happens on the final page where we dont fill up all 100 subplots
+                            pass
                         plt.axis('off')
                 plt.suptitle(f"Eigenvectors {quotient}00 to {index//100}99")
-                plt.savefig(f"assets/{env.name}_eigenvectors_{(index+1)//100}.png")
+                plt.savefig(f"assets/eigenvectors_{env.name}_{index+1}.png")
                 quotient += 1
                 eigvec_imgs = []
 
