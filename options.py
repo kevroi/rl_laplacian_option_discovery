@@ -139,19 +139,7 @@ class Options(object):
         for index, eig_vec in enumerate(self.eigenvectors):
             eigvec_img = np.zeros((max_row, max_col))
 
-            # TODO plot final 100
-            if index//100 > quotient:
-                plt.figure(0, figsize=(12,12))
 
-                for i in range(10):
-                    for j in range(10):
-                        ax = plt.subplot2grid((10,10), (i,j))
-                        ax.imshow(eigvec_imgs[(max_row-1)*i + j], cmap='jet', interpolation='nearest')
-                        plt.axis('off')
-                plt.suptitle(f"Eigenvectors{quotient}00 to {index//100}00")
-                plt.savefig(f"assets/{env.name}_eigenvectors_{index//100}.png")
-                quotient += 1
-                eigvec_imgs = []
 
             count = 0
             for r in range(max_row):
@@ -159,7 +147,20 @@ class Options(object):
                     eigvec_img[r, c] = eig_vec[count]
                     count += 1
             eigvec_imgs.append(eigvec_img)
-            # plt.imshow(eigvec_img, cmap='jet', interpolation='nearest')
-            # plt.savefig(f"test_{i}.png")
+
+            # TODO plot final 100
+            if (index+1)//100 > quotient:
+                plt.figure(0, figsize=(12,12))
+
+                for i in range(10):
+                    for j in range(10):
+                        ax = plt.subplot2grid((10,10), (i,j))
+                        ax.imshow(eigvec_imgs[(max_row-1)*i + j], cmap='jet', interpolation='nearest')
+                        plt.axis('off')
+                plt.suptitle(f"Eigenvectors {quotient}00 to {index//100}99")
+                plt.savefig(f"assets/{env.name}_eigenvectors_{(index+1)//100}.png")
+                quotient += 1
+                eigvec_imgs = []
+
 
         # plot_utils.print_eigen(v=self.eigenvectors[idx], max_col=env.max_col, max_row=env.max_row)

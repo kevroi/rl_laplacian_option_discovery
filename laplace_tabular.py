@@ -45,37 +45,36 @@ num_options = 200
 results = np.zeros((num_options+1, num_episodes))
 
 current_num_options = 0
-# for i in [0,2,4]:
-#     print('Explore Agent with ' + str(i) + ' options...')
-#     # add option
-#     while current_num_options < i:
-#         eigenoption = opt.learn_next_eigenoption(100000)
-#         # display or save newest learned option
-# 	# opt.display_eigenoption(display=False,
-#         #                        savename='option'+str(i)+'.png', idx=i-1)
-#         current_num_options += 1
-#         # Not adding options which terminate in all states
-#         if np.all(eigenoption == 4):
-#             #print "Not adding {}".format(current_num_options - 1)
-#             continue
-#         explore_agent.add_eigenoption(eigenoption)
-#     cum_reward = np.zeros(num_episodes)
-#     for run in range(num_runs):
-#         for ep in range(num_episodes):
-#             # run episode
-#             explore_glue.episode(100)
-#             learned_Q = explore_agent.get_Q()
-#             reward_agent.set_Q(learned_Q)
-#             reward_glue.episode(100)
-#             cum_reward[ep] += reward_glue.get_total_reward()
-#             reward_glue.cleanup()
-#         explore_glue.cleanup()
-#     cum_reward /= float(num_runs)
-#     results[i] = cum_reward
-# np.save('data_files/average_return', results)
+for i in [0,2,4]:
+    print('Explore Agent with ' + str(i) + ' options...')
+    # add option
+    while current_num_options < i:
+        eigenoption = opt.learn_next_eigenoption(100000)
+        # display or save newest learned option
+	# opt.display_eigenoption(display=False,
+        #                        savename='option'+str(i)+'.png', idx=i-1)
+        current_num_options += 1
+        # Not adding options which terminate in all states
+        if np.all(eigenoption == 4):
+            #print "Not adding {}".format(current_num_options - 1)
+            continue
+        explore_agent.add_eigenoption(eigenoption)
+    cum_reward = np.zeros(num_episodes)
+    for run in range(num_runs):
+        for ep in range(num_episodes):
+            # run episode
+            explore_glue.episode(100)
+            learned_Q = explore_agent.get_Q()
+            reward_agent.set_Q(learned_Q)
+            reward_glue.episode(100)
+            cum_reward[ep] += reward_glue.get_total_reward()
+            reward_glue.cleanup()
+        explore_glue.cleanup()
+    cum_reward /= float(num_runs)
+    results[i] = cum_reward
+np.save('data_files/average_return', results)
 
 
 # visualisation
 # print(len(opt.eigenvectors))
 # opt.display_eigenoption(savename='test')
-opt.display_eigenvector(env=opt_env)
