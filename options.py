@@ -163,7 +163,7 @@ class Options(object):
                             ax.imshow(np.zeros((max_row, max_col)), cmap='plasma', interpolation='nearest')
                         plt.axis('off')
                         
-                plt.suptitle(f"Eigenvectors {quotient}00 to {index//100}99")
+                plt.suptitle(f"Eigenvectors {quotient}00 to {index}")
                 plt.savefig(f"assets/eigenvectors_{env.name}_{index+1}.png")
                 quotient += 1
                 eigvec_imgs = []

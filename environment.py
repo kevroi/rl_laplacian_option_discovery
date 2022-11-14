@@ -196,11 +196,7 @@ class RoomEnvironment(BaseEnvironment):
 
 class I_MazeEnvironment(BaseEnvironment):
     def __init__(self):
-        I_maze_env = [
-            ' XXXXXXXXXXXXXG',
-            '               ',
-            'SXXXXXXXXXXXXX '
-        ]
+        I_maze_env = to_env_list('environments/imaze.txt')
 
         max_row, max_col, start_state, goal_state, obstacles = parse_env(I_maze_env)
         self.max_row = max_row

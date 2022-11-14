@@ -33,3 +33,11 @@ class TestToEnvList(unittest.TestCase):
                         '___________',
                         'S____X_____'
                         ])
+
+    def test_imazeenv(self):
+        self.assertEqual(to_env_list('environments/imaze.txt'),
+                        [
+                        '_XXXXXXXXXXXXXG',
+                        '_______________',
+                        'SXXXXXXXXXXXXX_'
+                        ])
