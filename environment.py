@@ -8,17 +8,17 @@ default_action_set = [(0, 1), (0, -1), (1, 0), (-1, 0)] # R, L, D, U
 
 TERMINATE_ACTION = (0,0)
 
-def initialize_env(env_type):
+# def initialize_env(env_type):
 
-    if env_type == "Grid":
-        return GridEnvironment()
-    elif env_type == "4-Room":
-        return RoomEnvironment()
-    elif env_type == "I-Maze":
-        return I_MazeEnvironment()
-    else:
-        print("Invalid Environment: " + env_type)
-        exit()
+#     if env_type == "Grid":
+#         return GridEnvironment()
+#     elif env_type == "4-Room":
+#         return RoomEnvironment()
+#     elif env_type == "I-Maze":
+#         return I_MazeEnvironment()
+#     else:
+#         print("Invalid Environment: " + env_type)
+#         exit()
 
 # returns relevant environment information
 def parse_env(env_grid):
@@ -206,6 +206,18 @@ class I_MazeEnvironment(BaseEnvironment):
         self.max_row = max_row
         self.max_col = max_col
         self.name = "IMaze"
+
+        BaseEnvironment.__init__(self, max_row, max_col, start_state,
+                 goal_state, obstacles)
+
+
+class HallEnvironment(BaseEnvironment):
+    def __init__(self):
+        room_env = to_env_list('environments/hall.txt')
+        max_row, max_col, start_state, goal_state, obstacles = parse_env(room_env)
+        self.max_row = max_row
+        self.max_col = max_col
+        self.name = "hall"
 
         BaseEnvironment.__init__(self, max_row, max_col, start_state,
                  goal_state, obstacles)

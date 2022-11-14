@@ -134,19 +134,19 @@ class Options(object):
     def display_eigenvector(self, env, idx=-1):
         max_row = env.max_row
         max_col = env.max_col
+
         eigvec_imgs = []
         quotient = 0
         
         for index, eig_vec in enumerate(self.eigenvectors):
             eigvec_img = np.zeros((max_row, max_col))
-
-
-
             count = 0
+
             for r in range(max_row):
                 for c in range(max_col):
                     eigvec_img[r, c] = eig_vec[count]
                     count += 1
+            
             eigvec_imgs.append(eigvec_img)
 
             # plot if time is right
@@ -157,15 +157,13 @@ class Options(object):
                     for j in range(10):
                         ax = plt.subplot2grid((10,10), (i,j))
                         try:
-                            ax.imshow(eigvec_imgs[(max_row-1)*i + j], cmap='jet', interpolation='nearest')
+                            ax.imshow(eigvec_imgs[10*i + j], cmap='plasma', interpolation='nearest')
                         except IndexError:
                             # this happens on the final page where we dont fill up all 100 subplots
-                            pass
+                            ax.imshow(np.zeros((max_row, max_col)), cmap='plasma', interpolation='nearest')
                         plt.axis('off')
+                        
                 plt.suptitle(f"Eigenvectors {quotient}00 to {index//100}99")
                 plt.savefig(f"assets/eigenvectors_{env.name}_{index+1}.png")
                 quotient += 1
                 eigvec_imgs = []
-
-
-        # plot_utils.print_eigen(v=self.eigenvectors[idx], max_col=env.max_col, max_row=env.max_row)
