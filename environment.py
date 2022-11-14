@@ -217,3 +217,15 @@ class HallEnvironment(BaseEnvironment):
 
         BaseEnvironment.__init__(self, max_row, max_col, start_state,
                  goal_state, obstacles)
+
+
+class ToyEnvironment(BaseEnvironment):
+    def __init__(self, name):
+        room_env = to_env_list(f"environments/{name}.txt")
+        max_row, max_col, start_state, goal_state, obstacles = parse_env(room_env)
+        self.max_row = max_row
+        self.max_col = max_col
+        self.name = name
+
+        BaseEnvironment.__init__(self, max_row, max_col, start_state,
+                 goal_state, obstacles)
