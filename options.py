@@ -48,7 +48,7 @@ class Options(object):
         total_states = len(states_rc)
 
         # Compute adjacency matrix (take all possible actions from every state)
-        adjacency = np.zeros((total_states, total_states), dtype = np.int)
+        adjacency = np.zeros((total_states, total_states), dtype = int)
         for state in range(total_states):
             for a in range(default_max_actions):
                 # Take a specified action from a given start state
@@ -58,7 +58,7 @@ class Options(object):
                 if next_state != state:
                     adjacency[state][next_state] = 1
 
-        D = np.zeros((total_states, total_states), dtype = np.int)
+        D = np.zeros((total_states, total_states), dtype = int)
 
         row_sum = np.sum(adjacency, axis=1)
         for state in range(total_states):
@@ -66,7 +66,7 @@ class Options(object):
 
         diff = D - adjacency
         sq_D = np.sqrt(D) # Diagonal matrix so element-wise operation is ok
-        L = np.matmul(sq_D, np.matmul(diff, sq_D))
+        L = np.matmul(sq_D, np.matmul(diff, sq_D)) # L = D^(-1/2) * (D - A) * D^(-1/2)
 
         # extract eigenvalues(w), eigenvectors(v)
         w, v = np.linalg.eig(L)
