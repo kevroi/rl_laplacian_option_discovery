@@ -28,6 +28,7 @@ class Options(object):
 
         self.glue = rlglue.RLGlue(self.env, self.agent)
 
+        self.eigenvalues = None
         self.eigenvectors = None
         self.eigenoptions = []
         self.option_idx = 0
@@ -50,13 +51,14 @@ class Options(object):
         # Compute adjacency matrix (take all possible actions from every state)
         adjacency = np.zeros((total_states, total_states), dtype = int)
         for state in range(total_states):
-            for a in range(default_max_actions):
-                # Take a specified action from a given start state
-                self.env.set_current_state(state)
-                result = self.glue.environment.step(a)
-                next_state = result["state"][0]
-                if next_state != state:
-                    adjacency[state][next_state] = 1
+            if states_rc[state] not in self.env.obstacle_vector:
+                for a in range(default_max_actions):
+                    # Take a specified action from a given start state
+                    self.env.set_current_state(state)
+                    result = self.glue.environment.step(a)
+                    next_state = result["state"][0]
+                    if next_state != state:
+                        adjacency[state][next_state] = 1
 
         D = np.zeros((total_states, total_states), dtype = int)
 
@@ -75,18 +77,23 @@ class Options(object):
         # sort in order of increasing eigenvalue
         # self.eigenoptions will be computed lazily
         idx = np.argsort(w)
-        eigenvalues = w[idx]
+        self.eigenvalues = w[idx]
+        # print("Eigenvalues: ", eigenvalues)
         self.eigenvectors = v[idx,:]
         # Adding eigenvectors in the opposite directions
         shape = self.eigenvectors.shape
-        shape = (shape[0] * 2, shape[1])
+        # shape = (shape[0] * 2, shape[1])
         eigenvectors = np.zeros(shape)
         for idx in range(len(self.eigenvectors)):
-            v1 = self.eigenvectors[idx] * 1
-            # v2 is the opposite eigenvector
-            v2 = self.eigenvectors[idx] * -1
-            eigenvectors[idx*2] = v1
-            eigenvectors[idx*2 + 1] = v2
+            ## This plots the eigenvectors in opposite directions, dont really need it
+            # v1 = self.eigenvectors[idx] * 1
+            # # v2 is the opposite eigenvector
+            # v2 = self.eigenvectors[idx] * -1
+            # eigenvectors[idx*2] = v1
+            # eigenvectors[idx*2 + 1] = v2
+
+            v = self.eigenvectors[idx] * 1
+            eigenvectors[idx] = v
 
         self.eigenvectors = eigenvectors
 
@@ -158,6 +165,8 @@ class Options(object):
                         ax = plt.subplot2grid((10,10), (i,j))
                         try:
                             ax.imshow(eigvec_imgs[10*i + j], cmap='plasma', interpolation='nearest')
+                            ax.text(0.5, -0.15, f'λ =  {self.eigenvalues[10 * i + j]:.2}', fontsize=8,
+                                    ha='center', transform=ax.transAxes)
                         except IndexError:
                             # this happens on the final page where we dont fill up all 100 subplots
                             ax.imshow(np.zeros((max_row, max_col)), cmap='plasma', interpolation='nearest')
