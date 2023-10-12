@@ -35,7 +35,7 @@ class Options(object):
         # compute eigen
         self.compute_eigen()
 
-    def compute_eigen(self, ignore_constant_eigvec=True):
+    def compute_eigen(self, ignore_constant_eigvec=True, include_negative_eigvec=True):
 
         # Need to exclude Terminate Action
         default_max_actions = self.env.get_default_max_actions()
@@ -71,18 +71,23 @@ class Options(object):
         L = np.matmul(sq_D, np.matmul(diff, sq_D)) # L = D^(-1/2) * (D - A) * D^(-1/2)
 
         # extract eigenvalues(w), eigenvectors(v)
-        w, v = np.linalg.eig(L)
-        v = v.T # switch axes to correspond to eigenvalue index
+        eigenvalues, eigenvectors = np.linalg.eig(L)
+        eigenvectors = eigenvectors.T # switch axes to correspond to eigenvalue index
 
-        # sort in order of increasing eigenvalue
-        # self.eigenoptions will be computed lazily
-        idx = np.argsort(w)
-        eigenvalues = w[idx]
-        eigenvectors = v[idx,:]
         # Filter out eigenvectors with eigenvalue 0
         if ignore_constant_eigvec:
             eigenvectors = eigenvectors[eigenvalues != 0.0]
             eigenvalues = eigenvalues[eigenvalues != 0.0]
+
+        if include_negative_eigvec:
+            eigenvectors = np.concatenate((eigenvectors, -eigenvectors), axis=0)
+            eigenvalues = np.concatenate((eigenvalues, eigenvalues), axis=0)
+
+        # sort in order of increasing eigenvalue
+        # self.eigenoptions will be computed lazily
+        idx = np.argsort(eigenvalues)
+        eigenvalues = eigenvalues[idx]
+        eigenvectors = eigenvectors[idx,:]
 
         # Update eigenvectors and eigenvalues
         self.eigenvectors = eigenvectors
