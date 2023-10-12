@@ -35,7 +35,7 @@ class Options(object):
         # compute eigen
         self.compute_eigen()
 
-    def compute_eigen(self):
+    def compute_eigen(self, ignore_constant_eigvec=True):
 
         # Need to exclude Terminate Action
         default_max_actions = self.env.get_default_max_actions()
@@ -77,25 +77,16 @@ class Options(object):
         # sort in order of increasing eigenvalue
         # self.eigenoptions will be computed lazily
         idx = np.argsort(w)
-        self.eigenvalues = w[idx]
-        # print("Eigenvalues: ", eigenvalues)
-        self.eigenvectors = v[idx,:]
-        # Adding eigenvectors in the opposite directions
-        shape = self.eigenvectors.shape
-        # shape = (shape[0] * 2, shape[1])
-        eigenvectors = np.zeros(shape)
-        for idx in range(len(self.eigenvectors)):
-            ## This plots the eigenvectors in opposite directions, dont really need it
-            # v1 = self.eigenvectors[idx] * 1
-            # # v2 is the opposite eigenvector
-            # v2 = self.eigenvectors[idx] * -1
-            # eigenvectors[idx*2] = v1
-            # eigenvectors[idx*2 + 1] = v2
+        eigenvalues = w[idx]
+        eigenvectors = v[idx,:]
+        # Filter out eigenvectors with eigenvalue 0
+        if ignore_constant_eigvec:
+            eigenvectors = eigenvectors[eigenvalues != 0.0]
+            eigenvalues = eigenvalues[eigenvalues != 0.0]
 
-            v = self.eigenvectors[idx] * 1
-            eigenvectors[idx] = v
-
+        # Update eigenvectors and eigenvalues
         self.eigenvectors = eigenvectors
+        self.eigenvalues = eigenvalues
 
     def learn_next_eigenoption(self, steps=100000):
 
@@ -143,7 +134,14 @@ class Options(object):
         max_col = env.max_col
 
         eigvec_imgs = []
+        eigval_texs = []
         quotient = 0
+
+        offsets = {"4room": [0.5, -0.15],
+                   "IMaze": [0.5, -0.55],
+                    }
+
+        text_offset = offsets[env.name]
         
         for index, eig_vec in enumerate(self.eigenvectors):
             eigvec_img = np.zeros((max_row, max_col))
@@ -155,6 +153,7 @@ class Options(object):
                     count += 1
             
             eigvec_imgs.append(eigvec_img)
+            eigval_texs.append(f'λ =  {self.eigenvalues[index]:.2}')
 
             # plot if time is right
             if (index+1)//100 > quotient or index == len(self.eigenvectors)-1:
@@ -163,16 +162,20 @@ class Options(object):
                 for i in range(10):
                     for j in range(10):
                         ax = plt.subplot2grid((10,10), (i,j))
+                        ax.clear()
                         try:
                             ax.imshow(eigvec_imgs[10*i + j], cmap='plasma', interpolation='nearest')
-                            ax.text(0.5, -0.15, f'λ =  {self.eigenvalues[10 * i + j]:.2}', fontsize=8,
+                            ax.text(text_offset[0], text_offset[1], eigval_texs[10*i + j], fontsize=8,
                                     ha='center', transform=ax.transAxes)
                         except IndexError:
                             # this happens on the final page where we dont fill up all 100 subplots
                             ax.imshow(np.zeros((max_row, max_col)), cmap='plasma', interpolation='nearest')
+                            ax.text(text_offset[0], text_offset[1], " ", fontsize=8,
+                                    ha='center', transform=ax.transAxes)
                         plt.axis('off')
                         
                 plt.suptitle(f"Eigenvectors {quotient}00 to {index}")
                 plt.savefig(f"assets/eigenvectors_{env.name}_{index+1}.png")
                 quotient += 1
                 eigvec_imgs = []
+                eigval_texs = []
