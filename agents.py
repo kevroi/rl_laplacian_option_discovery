@@ -134,7 +134,7 @@ class QAgent(object):
         self.Q = Q
 
     def get_policy(self):
-        pi = np.zeros((len(self.states_rc,)), dtype=np.int)
+        pi = np.zeros((len(self.states_rc,)), dtype=int)
 
         for idx, state in enumerate(self.states_rc):
             row, col = state[0], state[1]
