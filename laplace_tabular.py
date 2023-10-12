@@ -10,6 +10,7 @@ import options
 
 # Setting up explore_agent which would learn Q-values using options
 explore_env = environment.GridEnvironment()
+explore_env = environment.I_MazeEnvironment()
 
 max_row, max_col = explore_env.get_grid_dimension() # get dimension of the environment
 explore_agent = agents.OptionExploreQAgent(max_row=max_row, max_col=max_col)
@@ -20,6 +21,7 @@ explore_glue = rlglue.RLGlue(explore_env, explore_agent)
 # Setting up reward_agent which would use Q-values learnt by explore_agent
 # to accumulate reward
 reward_env = environment.GridEnvironment()
+reward_env = environment.I_MazeEnvironment()
 
 max_row, max_col = reward_env.get_grid_dimension() # get dimension of the environment
 reward_agent = agents.QAgent(max_row=max_row, max_col=max_col)
@@ -45,7 +47,7 @@ num_options = 200
 results = np.zeros((num_options+1, num_episodes))
 
 current_num_options = 0
-for i in [0,2,4]:
+for i in [0,2,4,8,64,128]:
     print('Explore Agent with ' + str(i) + ' options...')
     # add option
     while current_num_options < i:
@@ -72,7 +74,7 @@ for i in [0,2,4]:
         explore_glue.cleanup()
     cum_reward /= float(num_runs)
     results[i] = cum_reward
-np.save('data_files/average_return', results)
+np.save(f'data_files/{reward_env.name}_average_return', results)
 
 
 # visualisation
